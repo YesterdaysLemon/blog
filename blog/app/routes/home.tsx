@@ -1,5 +1,8 @@
+import React, { useState } from "react";
+import { Button } from "~/components/ui/button";
 import type { Route } from "./+types/home";
-import { Welcome } from "../welcome/welcome";
+
+
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -9,5 +12,15 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function Home() {
-  return <Welcome />;
+  const [count, setCount] = useState(0);
+
+  return (
+    <div className="flex flex-col items-center justify-center h-screen">
+      <h1 className="text-4xl font-bold">Hello World</h1>
+      <Button variant="outline" onClick={() => setCount(count + 1)}>
+        Click me
+      </Button>
+      <p>Count: {count}</p>
+    </div>
+  );
 }
