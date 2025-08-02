@@ -17,11 +17,5 @@ export const AppDataSource = new DataSource({
   subscribers: [],
 });
 
-try {
-  await AppDataSource.initialize()
-} catch (error) {
-  console.log(error)
-}
-
 export const PostRepository = AppDataSource.getRepository(Post);
 export const UserRepository = AppDataSource.getRepository(User);
