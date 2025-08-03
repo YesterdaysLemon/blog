@@ -1,27 +1,34 @@
 import { User } from "./User";
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  JoinColumn,
+} from "typeorm";
+import "reflect-metadata";
 
 @Entity()
 export class Post {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column()
   @ManyToOne(() => User, (user: User) => user.posts)
+  @JoinColumn()
   author!: User;
 
-  @Column()
+  @Column("varchar")
   title!: string;
 
-  @Column()
+  @Column("text")
   content!: string;
 
-  @Column()
+  @Column("timestamp")
   createdAt!: Date;
 
-  @Column()
+  @Column("timestamp")
   updatedAt!: Date;
 
-  @Column()
+  @Column("boolean")
   published!: boolean;
 }

@@ -1,3 +1,4 @@
+"use server";
 import React, { StrictMode } from "react";
 import {
   isRouteErrorResponse,
@@ -10,8 +11,36 @@ import {
 
 import type { Route } from "./+types/root";
 import "./app.css";
+
 import "reflect-metadata";
-import { AppDataSource } from "db/data-source";
+import { getDataSource, getUserRepository } from "db/data-source";
+
+let dbInitialized = false;
+
+const initializeDatabase = async () => {
+  if (dbInitialized) return;
+
+  try {
+    const dataSource = await getDataSource();
+    if (!dataSource) {
+      throw new Error("Failed to initialize database");
+    }
+
+    const userRepository = await getUserRepository();
+    if (!userRepository) {
+      throw new Error("Failed to get user repository");
+    }
+
+    const users = await userRepository.find();
+    console.log(users);
+
+    dbInitialized = true;
+  } catch (error) {
+    console.error("Database initialization error:", error);
+  }
+};
+
+await initializeDatabase();
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -44,12 +73,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default async function App() {
-  try {
-    await AppDataSource.initialize();
-  } catch (error) {
-    console.log(error);
-  }
+export default function App() {
   return (
     <StrictMode>
       <Outlet />

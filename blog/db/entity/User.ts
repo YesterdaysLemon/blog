@@ -1,4 +1,3 @@
-
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Post } from "./Post";
 
@@ -7,10 +6,10 @@ export class User {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column()
+  @Column("varchar")
   firstName!: string;
 
-  @Column()
+  @Column("varchar")
   lastName!: string;
 
   @OneToMany(() => Post, (post) => post.author)
