@@ -4,19 +4,30 @@ import type { DataSourceOptions } from "typeorm";
 import { User } from "./entity/User";
 import { Post } from "./entity/Post";
 
-const postgressOptions: DataSourceOptions = {
+let postgressOptions: DataSourceOptions = {
   type: "postgres",
   host: "localhost",
   port: 5432,
-  username: "test",
-  password: "test",
-  database: "test",
   synchronize: true,
   logging: false,
   entities: [User, Post],
   migrations: [],
   subscribers: [],
 };
+
+if (import.meta.env.VITE_MODE === "DEVELOPMENT") {
+  console.log("DEVELOPMENT");
+  postgressOptions = {
+    ...postgressOptions,
+    username: import.meta.env.VITE_DEVELOPMENT_DB_USERNAME,
+    password: import.meta.env.VITE_DEVELOPMENT_DB_PASSWORD,
+    database: import.meta.env.VITE_DEVELOPMENT_DB
+  };
+} else if (import.meta.env.VITE_MODE === "PRODUCTION") {
+  console.log("PRODUCTION");
+} else {
+  console.log("UNKNOWN");
+}
 
 let AppDataSource: DataSource | null = null;
 
